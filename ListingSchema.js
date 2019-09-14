@@ -24,6 +24,8 @@ var listingSchema = new Schema({
    See https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
 */
 listingSchema.pre('save', function(next) {
+  // if (!this.name) throw new Error("no name provided")
+  // if (!this.code) throw new Error("no code provided")
   var currentDate = new Date()
   this.updated_at = currentDate
   if (!this.created_at)

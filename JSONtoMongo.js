@@ -9,12 +9,27 @@ var fs = require('fs'),
     Listing = require('./ListingSchema.js'), 
     config = require('./config');
 
-mongoose.connect(config.db.uri, {useNewUrlParser : true})
 
 
+const connector = mongoose.connect(config.db.uri, { useUnifiedTopology: true, useNewUrlParser: true}).
+  catch (error => console.log(error))
+
+console.log("it connected!")
+
+fs.readFile("listings.json", 'utf8', function(err, data) {
+  var listingData = JSON.parse(data);
+  console.log(listingData.entries.length)
+  listingData.entries.forEach((element) => {
+      var entry = new Listing(element)
+      entry.save((error) => {
+        if (error) throw error
+      })
+  })
+})
+console.log("done")
 /* Connect to your database using mongoose - remember to keep your key secret*/
 //see https://mongoosejs.com/docs/connections.html
-//See https://docs.atlas.mongodb.com/driver-connection/
+//See http=s://docs.atlas.mongodb.com/driver-connection/
 
 /* 
   Instantiate a mongoose model for each listing object in the JSON file, 
